@@ -1,0 +1,1226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>TechCalc</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #020617, #061a36, #0b2a52);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.calculator {
+    width: 1100px;
+    max-width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 20px;
+}
+
+.panel {
+    background: #071a33;
+    border: 1px solid #173b67;
+    border-radius: 20px;
+    padding: 22px;
+    box-shadow: 0 20px 50px rgba(0,0,0,.5);
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo {
+    width: 45px;
+    height: 45px;
+    background: white;
+    color: #06204a;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.brand h1 {
+    font-size: 21px;
+}
+
+.brand p {
+    color: #8fa9c7;
+    font-size: 12px;
+    margin-top: 3px;
+}
+
+.top-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+button {
+    border: 1px solid #d5deea;
+    background: white;
+    color: #06204a;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: .15s;
+}
+
+button:hover {
+    background: #e8f0f8;
+    transform: translateY(-2px);
+}
+
+button:active {
+    transform: scale(.95);
+}
+
+.top-buttons button {
+    padding: 9px 12px;
+}
+
+.display {
+    height: 130px;
+    background: #020b18;
+    border: 1px solid #173b67;
+    border-radius: 15px;
+    padding: 18px;
+    margin-bottom: 15px;
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    overflow: hidden;
+}
+
+#expression {
+    color: #7895b6;
+    min-height: 25px;
+    font-size: 16px;
+    word-break: break-all;
+}
+
+#result {
+    color: white;
+    font-size: 40px;
+    font-weight: bold;
+    word-break: break-all;
+}
+
+.scientific {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 7px;
+    margin-bottom: 9px;
+}
+
+.scientific button {
+    height: 42px;
+    font-size: 12px;
+}
+
+.scientific.hide {
+    display: none;
+}
+
+.buttons {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 9px;
+}
+
+.buttons button {
+    height: 55px;
+    font-size: 16px;
+}
+
+.zero {
+    grid-column: span 2;
+}
+
+.operator,
+.equals {
+    font-size: 19px !important;
+}
+
+.history {
+    min-height: 600px;
+}
+
+.history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.history-header h2 {
+    font-size: 18px;
+}
+
+.history-header p {
+    color: #7895b6;
+    font-size: 11px;
+    margin-top: 3px;
+}
+
+.history-header button {
+    padding: 7px 10px;
+}
+
+#historyList {
+    max-height: 530px;
+    overflow-y: auto;
+}
+
+.history-item {
+    padding: 12px 8px;
+    border-bottom: 1px solid #173b67;
+    cursor: pointer;
+}
+
+.history-item:hover {
+    background: #0d2b50;
+}
+
+.history-expression {
+    color: #7895b6;
+    font-size: 12px;
+}
+
+.history-result {
+    color: white;
+    font-size: 16px;
+    margin-top: 4px;
+    font-weight: bold;
+}
+
+.empty {
+    color: #7895b6;
+    text-align: center;
+    margin-top: 50px;
+    font-size: 14px;
+}
+
+.keyboard {
+    color: #7895b6;
+    text-align: center;
+    font-size: 12px;
+    margin-top: 13px;
+}
+
+.keyboard span {
+    background: #102c4d;
+    padding: 3px 6px;
+    border-radius: 4px;
+    margin-left: 4px;
+}
+
+@media(max-width:850px) {
+
+    .calculator {
+        grid-template-columns: 1fr;
+    }
+
+    .history {
+        min-height: 300px;
+    }
+}
+
+@media(max-width:550px) {
+
+    body {
+        padding: 8px;
+    }
+
+    .panel {
+        padding: 12px;
+    }
+
+    .header {
+        align-items: flex-start;
+    }
+
+    .top-buttons {
+        flex-direction: column;
+    }
+
+    .scientific {
+        gap: 4px;
+    }
+
+    .scientific button {
+        font-size: 10px;
+    }
+
+    .buttons {
+        gap: 5px;
+    }
+
+    .buttons button {
+        height: 48px;
+        font-size: 13px;
+    }
+
+    #result {
+        font-size: 30px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="calculator">
+
+    <!-- MAIN CALCULATOR -->
+
+    <div class="panel">
+
+        <div class="header">
+
+            <div class="brand">
+
+                <div class="logo">∑</div>
+
+                <div>
+                    <h1>TechCalc</h1>
+                    <p>Scientific Engineering Calculator</p>
+                </div>
+
+            </div>
+
+            <div class="top-buttons">
+
+                <button id="scientificBtn">
+                    Scientific
+                </button>
+
+                <button id="angleBtn">
+                    DEG
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- DISPLAY -->
+
+        <div class="display">
+
+            <div id="expression">
+                0
+            </div>
+
+            <div id="result">
+                0
+            </div>
+
+        </div>
+
+
+        <!-- SCIENTIFIC -->
+
+        <div
+            id="scientific"
+            class="scientific">
+
+            <button data-value="sin(">sin</button>
+            <button data-value="cos(">cos</button>
+            <button data-value="tan(">tan</button>
+
+            <button data-value="asin(">sin⁻¹</button>
+            <button data-value="acos(">cos⁻¹</button>
+            <button data-value="atan(">tan⁻¹</button>
+
+            <button data-value="log(">log</button>
+            <button data-value="ln(">ln</button>
+            <button data-value="sqrt(">√</button>
+
+            <button data-value="cbrt(">∛</button>
+            <button data-value="abs(">abs</button>
+            <button data-value="exp(">exp</button>
+
+            <button data-value="floor(">floor</button>
+            <button data-value="ceil(">ceil</button>
+            <button data-value="round(">round</button>
+
+            <button data-value="10^(">10ˣ</button>
+            <button data-value="π">π</button>
+            <button data-value="e">e</button>
+
+            <button data-value="max(">max</button>
+            <button data-value="min(">min</button>
+            <button data-value="Ans">Ans</button>
+
+            <button data-value="^">xʸ</button>
+            <button data-value="!">x!</button>
+            <button data-value=",">,</button>
+
+        </div>
+
+
+        <!-- NORMAL BUTTONS -->
+
+        <div class="buttons">
+
+            <button id="clear">AC</button>
+            <button id="delete">DEL</button>
+            <button data-value="(">(</button>
+            <button data-value=")">)</button>
+            <button data-value="%">%</button>
+            <button data-value="/">÷</button>
+
+            <button data-value="7">7</button>
+            <button data-value="8">8</button>
+            <button data-value="9">9</button>
+            <button data-value="4">4</button>
+            <button data-value="5">5</button>
+            <button data-value="*">×</button>
+
+            <button data-value="6">6</button>
+            <button data-value="1">1</button>
+            <button data-value="2">2</button>
+            <button data-value="3">3</button>
+            <button data-value=".">.</button>
+            <button data-value="-">−</button>
+
+            <button
+                data-value="0"
+                class="zero">
+                0
+            </button>
+
+            <button data-value="+">+</button>
+
+            <button id="equals">
+                =
+            </button>
+
+        </div>
+
+
+        <div class="keyboard">
+            ⌨ Keyboard:
+            <span>Enter</span>
+            <span>Backspace</span>
+            <span>Esc</span>
+        </div>
+
+    </div>
+
+
+    <!-- HISTORY -->
+
+    <div class="panel history">
+
+        <div class="history-header">
+
+            <div>
+                <h2>History</h2>
+                <p>Recent calculations</p>
+            </div>
+
+            <button id="clearHistory">
+                Clear
+            </button>
+
+        </div>
+
+        <div id="historyList">
+
+            <div class="empty">
+                No calculations yet
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =====================================
+   VARIABLES
+===================================== */
+
+let expression = "";
+
+let lastAnswer = 0;
+
+let angleMode = "DEG";
+
+let scientificMode = true;
+
+
+/* =====================================
+   ELEMENTS
+===================================== */
+
+const expressionDisplay =
+    document.getElementById("expression");
+
+const resultDisplay =
+    document.getElementById("result");
+
+const scientificPanel =
+    document.getElementById("scientific");
+
+const historyList =
+    document.getElementById("historyList");
+
+
+/* =====================================
+   DISPLAY
+===================================== */
+
+function updateDisplay() {
+
+    expressionDisplay.textContent =
+        expression || "0";
+
+}
+
+
+/* =====================================
+   ADD
+===================================== */
+
+function addToDisplay(value) {
+
+    expression += value;
+
+    updateDisplay();
+
+}
+
+
+/* =====================================
+   CLEAR
+===================================== */
+
+function clearCalculator() {
+
+    expression = "";
+
+    resultDisplay.textContent = "0";
+
+    updateDisplay();
+
+}
+
+
+/* =====================================
+   DELETE
+===================================== */
+
+function deleteLast() {
+
+    expression =
+        expression.slice(0, -1);
+
+    updateDisplay();
+
+}
+
+
+/* =====================================
+   ANGLE
+===================================== */
+
+function radians(x) {
+
+    if (angleMode === "DEG") {
+
+        return x * Math.PI / 180;
+
+    }
+
+    return x;
+
+}
+
+
+function degrees(x) {
+
+    if (angleMode === "DEG") {
+
+        return x * 180 / Math.PI;
+
+    }
+
+    return x;
+
+}
+
+
+/* =====================================
+   FUNCTIONS
+===================================== */
+
+function sin(x) {
+    return Math.sin(radians(x));
+}
+
+function cos(x) {
+    return Math.cos(radians(x));
+}
+
+function tan(x) {
+    return Math.tan(radians(x));
+}
+
+function asin(x) {
+    return degrees(Math.asin(x));
+}
+
+function acos(x) {
+    return degrees(Math.acos(x));
+}
+
+function atan(x) {
+    return degrees(Math.atan(x));
+}
+
+function sqrt(x) {
+    return Math.sqrt(x);
+}
+
+function cbrt(x) {
+    return Math.cbrt(x);
+}
+
+function log(x) {
+    return Math.log10(x);
+}
+
+function ln(x) {
+    return Math.log(x);
+}
+
+function abs(x) {
+    return Math.abs(x);
+}
+
+function exp(x) {
+    return Math.exp(x);
+}
+
+function floor(x) {
+    return Math.floor(x);
+}
+
+function ceil(x) {
+    return Math.ceil(x);
+}
+
+function round(x) {
+    return Math.round(x);
+}
+
+function max(a,b) {
+    return Math.max(a,b);
+}
+
+function min(a,b) {
+    return Math.min(a,b);
+}
+
+
+/* =====================================
+   FACTORIAL
+===================================== */
+
+function factorial(n) {
+
+    n = Number(n);
+
+    if (
+        n < 0 ||
+        !Number.isInteger(n)
+    ) {
+
+        throw new Error(
+            "Invalid factorial"
+        );
+
+    }
+
+    let answer = 1;
+
+    for (
+        let i = 2;
+        i <= n;
+        i++
+    ) {
+
+        answer *= i;
+
+    }
+
+    return answer;
+}
+
+
+/* =====================================
+   PREPARE
+===================================== */
+
+function prepare(text) {
+
+    let value = text;
+
+
+    /* PI */
+
+    value = value.replaceAll(
+        "π",
+        "Math.PI"
+    );
+
+
+    /* ANSWER */
+
+    value = value.replaceAll(
+        "Ans",
+        "(" + lastAnswer + ")"
+    );
+
+
+    /* E */
+
+    value = value.replace(
+        /\be\b/g,
+        "Math.E"
+    );
+
+
+    /* POWER */
+
+    value = value.replaceAll(
+        "^",
+        "**"
+    );
+
+
+    /* PERCENTAGE */
+
+    value = value.replace(
+        /(\d+(?:\.\d+)?)%/g,
+        "($1/100)"
+    );
+
+
+    /* FACTORIAL */
+
+    value = value.replace(
+        /(\d+(?:\.\d+)?)!/g,
+        "factorial($1)"
+    );
+
+
+    return value;
+}
+
+
+/* =====================================
+   CALCULATE
+===================================== */
+
+function calculate() {
+
+    if (!expression) {
+        return;
+    }
+
+
+    try {
+
+        let prepared =
+            prepare(expression);
+
+
+        let fn =
+            new Function(
+
+                "sin",
+                "cos",
+                "tan",
+
+                "asin",
+                "acos",
+                "atan",
+
+                "sqrt",
+                "cbrt",
+
+                "log",
+                "ln",
+
+                "abs",
+                "exp",
+
+                "floor",
+                "ceil",
+                "round",
+
+                "max",
+                "min",
+
+                "factorial",
+
+                "return " + prepared
+            );
+
+
+        let value =
+            fn(
+
+                sin,
+                cos,
+                tan,
+
+                asin,
+                acos,
+                atan,
+
+                sqrt,
+                cbrt,
+
+                log,
+                ln,
+
+                abs,
+                exp,
+
+                floor,
+                ceil,
+                round,
+
+                max,
+                min,
+
+                factorial
+            );
+
+
+        if (
+            typeof value !== "number" ||
+            !Number.isFinite(value)
+        ) {
+
+            throw new Error(
+                "Invalid result"
+            );
+
+        }
+
+
+        lastAnswer = value;
+
+
+        let formatted =
+            Number(
+                value.toPrecision(10)
+            );
+
+
+        resultDisplay.textContent =
+            formatted;
+
+
+        saveHistory(
+            expression,
+            formatted
+        );
+
+    }
+
+    catch(error) {
+
+        console.error(error);
+
+        resultDisplay.textContent =
+            "Error";
+
+    }
+
+}
+
+
+/* =====================================
+   BUTTONS
+===================================== */
+
+document
+    .querySelectorAll(
+        "[data-value]"
+    )
+    .forEach(function(button) {
+
+        button.addEventListener(
+            "click",
+            function() {
+
+                addToDisplay(
+                    button.dataset.value
+                );
+
+            }
+        );
+
+    });
+
+
+/* =====================================
+   CLEAR
+===================================== */
+
+document
+    .getElementById("clear")
+    .addEventListener(
+        "click",
+        clearCalculator
+    );
+
+
+/* =====================================
+   DELETE
+===================================== */
+
+document
+    .getElementById("delete")
+    .addEventListener(
+        "click",
+        deleteLast
+    );
+
+
+/* =====================================
+   EQUALS
+===================================== */
+
+document
+    .getElementById("equals")
+    .addEventListener(
+        "click",
+        calculate
+    );
+
+
+/* =====================================
+   SCIENTIFIC TOGGLE
+===================================== */
+
+document
+    .getElementById("scientificBtn")
+    .addEventListener(
+        "click",
+        function() {
+
+            scientificMode =
+                !scientificMode;
+
+
+            scientificPanel.classList.toggle(
+                "hide",
+                !scientificMode
+            );
+
+
+            this.textContent =
+                scientificMode
+                    ? "Scientific"
+                    : "Standard";
+
+        }
+    );
+
+
+/* =====================================
+   DEG / RAD
+===================================== */
+
+document
+    .getElementById("angleBtn")
+    .addEventListener(
+        "click",
+        function() {
+
+            angleMode =
+                angleMode === "DEG"
+                    ? "RAD"
+                    : "DEG";
+
+
+            this.textContent =
+                angleMode;
+
+        }
+    );
+
+
+/* =====================================
+   HISTORY
+===================================== */
+
+function saveHistory(
+    exp,
+    result
+) {
+
+    let history =
+        JSON.parse(
+            localStorage.getItem(
+                "techCalcHistory"
+            )
+        ) || [];
+
+
+    history.unshift({
+
+        expression: exp,
+
+        result: result
+
+    });
+
+
+    history =
+        history.slice(0,30);
+
+
+    localStorage.setItem(
+        "techCalcHistory",
+        JSON.stringify(history)
+    );
+
+
+    showHistory();
+
+}
+
+
+function showHistory() {
+
+    let history =
+        JSON.parse(
+            localStorage.getItem(
+                "techCalcHistory"
+            )
+        ) || [];
+
+
+    historyList.innerHTML = "";
+
+
+    if (history.length === 0) {
+
+        historyList.innerHTML =
+            '<div class="empty">No calculations yet</div>';
+
+        return;
+
+    }
+
+
+    history.forEach(function(item) {
+
+        let div =
+            document.createElement("div");
+
+
+        div.className =
+            "history-item";
+
+
+        div.innerHTML = `
+
+            <div class="history-expression">
+                ${item.expression}
+            </div>
+
+            <div class="history-result">
+                = ${item.result}
+            </div>
+
+        `;
+
+
+        div.addEventListener(
+            "click",
+            function() {
+
+                expression =
+                    item.expression;
+
+                resultDisplay.textContent =
+                    item.result;
+
+                updateDisplay();
+
+            }
+        );
+
+
+        historyList.appendChild(div);
+
+    });
+
+}
+
+
+/* =====================================
+   CLEAR HISTORY
+===================================== */
+
+document
+    .getElementById("clearHistory")
+    .addEventListener(
+        "click",
+        function() {
+
+            localStorage.removeItem(
+                "techCalcHistory"
+            );
+
+            showHistory();
+
+        }
+    );
+
+
+/* =====================================
+   KEYBOARD
+===================================== */
+
+document.addEventListener(
+    "keydown",
+    function(event) {
+
+        let key = event.key;
+
+
+        if (
+            key >= "0" &&
+            key <= "9"
+        ) {
+
+            addToDisplay(key);
+
+        }
+
+
+        else if (
+            "+-().".includes(key)
+        ) {
+
+            addToDisplay(key);
+
+        }
+
+
+        else if (
+            key === "*"
+        ) {
+
+            addToDisplay("*");
+
+        }
+
+
+        else if (
+            key === "/"
+        ) {
+
+            event.preventDefault();
+
+            addToDisplay("/");
+
+        }
+
+
+        else if (
+            key === "%"
+        ) {
+
+            addToDisplay("%");
+
+        }
+
+
+        else if (
+            key === "Enter" ||
+            key === "="
+        ) {
+
+            event.preventDefault();
+
+            calculate();
+
+        }
+
+
+        else if (
+            key === "Backspace"
+        ) {
+
+            deleteLast();
+
+        }
+
+
+        else if (
+            key === "Escape"
+        ) {
+
+            clearCalculator();
+
+        }
+
+    }
+);
+
+
+/* =====================================
+   START
+===================================== */
+
+showHistory();
+
+updateDisplay();
+
+</script>
+
+</body>
+</html>
